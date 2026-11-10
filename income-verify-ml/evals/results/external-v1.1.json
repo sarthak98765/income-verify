@@ -1,0 +1,703 @@
+{
+ "name": "IncomeVerify v1.1 (external AgamiAI scanned statements, extract=gpt-6.1-terra) \u00b7 n=30",
+ "summary": {
+  "all": {
+   "statements": 30,
+   "pages": 180,
+   "rows": 4841,
+   "classification": 1.0,
+   "fields": {
+    "account_holder": 1.0,
+    "opening_balance": 1.0,
+    "closing_balance": 1.0
+   },
+   "transactions": {
+    "precision": 0.989051848791572,
+    "recall": 0.989051848791572,
+    "f1": 0.989051848791572
+   },
+   "exact": 0.7333333333333333,
+   "truth_breaking": 30,
+   "chain_agrees": 0.7333333333333333,
+   "seconds_p50": 162.55,
+   "seconds_p95": 201.1,
+   "cost": 0.12618943333333335
+  },
+  "type1": {
+   "statements": 15,
+   "pages": 90,
+   "rows": 2423,
+   "classification": 1.0,
+   "fields": {
+    "account_holder": 1.0,
+    "opening_balance": 1.0,
+    "closing_balance": 1.0
+   },
+   "transactions": {
+    "precision": 0.9884440775897647,
+    "recall": 0.9884440775897647,
+    "f1": 0.9884440775897647
+   },
+   "exact": 0.6,
+   "truth_breaking": 15,
+   "chain_agrees": 0.6,
+   "seconds_p50": 187.0,
+   "seconds_p95": 201.1,
+   "cost": 0.13734206666666668
+  },
+  "type2": {
+   "statements": 15,
+   "pages": 90,
+   "rows": 2418,
+   "classification": 1.0,
+   "fields": {
+    "account_holder": 1.0,
+    "opening_balance": 1.0,
+    "closing_balance": 1.0
+   },
+   "transactions": {
+    "precision": 0.9896608767576509,
+    "recall": 0.9896608767576509,
+    "f1": 0.9896608767576509
+   },
+   "exact": 0.8666666666666667,
+   "truth_breaking": 15,
+   "chain_agrees": 0.8666666666666667,
+   "seconds_p50": 151.2,
+   "seconds_p95": 161.5,
+   "cost": 0.1150368
+  }
+ },
+ "statements": [
+  {
+   "name": "type1-00001",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 188.8,
+   "cost": 0.131894,
+   "pages": 6,
+   "rows": 162,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 162,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 20,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00002",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 179.3,
+   "cost": 0.138689,
+   "pages": 6,
+   "rows": 161,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 161,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 19,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00003",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 174.5,
+   "cost": 0.136538,
+   "pages": 6,
+   "rows": 159,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 145,
+    "fp": 14,
+    "fn": 14
+   },
+   "truth_breaks": 10,
+   "chain_agrees": false
+  },
+  {
+   "name": "type1-00004",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 163.6,
+   "cost": 0.118714,
+   "pages": 6,
+   "rows": 155,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 154,
+    "fp": 1,
+    "fn": 1
+   },
+   "truth_breaks": 10,
+   "chain_agrees": false
+  },
+  {
+   "name": "type1-00005",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 201.1,
+   "cost": 0.172963,
+   "pages": 6,
+   "rows": 170,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 170,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 38,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00006",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 176.8,
+   "cost": 0.130455,
+   "pages": 6,
+   "rows": 159,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 159,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 17,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00007",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 166.0,
+   "cost": 0.12284,
+   "pages": 6,
+   "rows": 162,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 161,
+    "fp": 1,
+    "fn": 1
+   },
+   "truth_breaks": 14,
+   "chain_agrees": false
+  },
+  {
+   "name": "type1-00008",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 187.6,
+   "cost": 0.155247,
+   "pages": 6,
+   "rows": 166,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 158,
+    "fp": 8,
+    "fn": 8
+   },
+   "truth_breaks": 24,
+   "chain_agrees": false
+  },
+  {
+   "name": "type1-00009",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 189.6,
+   "cost": 0.127432,
+   "pages": 6,
+   "rows": 159,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 159,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 14,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00010",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 197.8,
+   "cost": 0.161607,
+   "pages": 6,
+   "rows": 167,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 164,
+    "fp": 3,
+    "fn": 3
+   },
+   "truth_breaks": 26,
+   "chain_agrees": false
+  },
+  {
+   "name": "type1-00011",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 167.2,
+   "cost": 0.124586,
+   "pages": 6,
+   "rows": 158,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 157,
+    "fp": 1,
+    "fn": 1
+   },
+   "truth_breaks": 12,
+   "chain_agrees": false
+  },
+  {
+   "name": "type1-00012",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 190.1,
+   "cost": 0.157161,
+   "pages": 6,
+   "rows": 165,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 165,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 28,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00013",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 154.9,
+   "cost": 0.103751,
+   "pages": 6,
+   "rows": 156,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 156,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 8,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00014",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 187.0,
+   "cost": 0.126255,
+   "pages": 6,
+   "rows": 159,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 159,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 16,
+   "chain_agrees": true
+  },
+  {
+   "name": "type1-00015",
+   "layout": "type1",
+   "classified": true,
+   "seconds": 229.8,
+   "cost": 0.151999,
+   "pages": 6,
+   "rows": 165,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 165,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 26,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00001",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 128.9,
+   "cost": 0.097075,
+   "pages": 6,
+   "rows": 161,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 161,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 16,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00002",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 159.8,
+   "cost": 0.137285,
+   "pages": 6,
+   "rows": 167,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 167,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 30,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00003",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 161.5,
+   "cost": 0.137887,
+   "pages": 6,
+   "rows": 163,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 150,
+    "fp": 13,
+    "fn": 13
+   },
+   "truth_breaks": 23,
+   "chain_agrees": false
+  },
+  {
+   "name": "type2-00004",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 136.9,
+   "cost": 0.095225,
+   "pages": 6,
+   "rows": 156,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 156,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 9,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00005",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 133.8,
+   "cost": 0.096,
+   "pages": 6,
+   "rows": 156,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 156,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 9,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00006",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 137.8,
+   "cost": 0.102688,
+   "pages": 6,
+   "rows": 158,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 158,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 16,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00007",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 154.6,
+   "cost": 0.112565,
+   "pages": 6,
+   "rows": 160,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 160,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 17,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00008",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 156.0,
+   "cost": 0.134031,
+   "pages": 6,
+   "rows": 159,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 147,
+    "fp": 12,
+    "fn": 12
+   },
+   "truth_breaks": 14,
+   "chain_agrees": false
+  },
+  {
+   "name": "type2-00009",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 151.2,
+   "cost": 0.121506,
+   "pages": 6,
+   "rows": 163,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 163,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 23,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00010",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 187.3,
+   "cost": 0.133267,
+   "pages": 6,
+   "rows": 168,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 168,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 30,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00011",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 141.2,
+   "cost": 0.089967,
+   "pages": 6,
+   "rows": 158,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 158,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 10,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00012",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 156.6,
+   "cost": 0.121372,
+   "pages": 6,
+   "rows": 161,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 161,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 21,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00013",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 160.2,
+   "cost": 0.137911,
+   "pages": 6,
+   "rows": 171,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 171,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 32,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00014",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 140.5,
+   "cost": 0.10354,
+   "pages": 6,
+   "rows": 159,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 159,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 11,
+   "chain_agrees": true
+  },
+  {
+   "name": "type2-00015",
+   "layout": "type2",
+   "classified": true,
+   "seconds": 147.4,
+   "cost": 0.105233,
+   "pages": 6,
+   "rows": 158,
+   "fields": {
+    "account_holder": true,
+    "opening_balance": true,
+    "closing_balance": true
+   },
+   "transactions": {
+    "tp": 158,
+    "fp": 0,
+    "fn": 0
+   },
+   "truth_breaks": 12,
+   "chain_agrees": true
+  }
+ ]
+}

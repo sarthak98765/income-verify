@@ -1,0 +1,354 @@
+{
+  "name": "How IncomeVerify checks a loan file",
+  "size": {
+    "w": 2260,
+    "h": 780
+  },
+  "grid": {
+    "x0": 154,
+    "y0": 178,
+    "col": 270,
+    "row": 160
+  },
+  "sizes": {
+    "step": [
+      248,
+      112
+    ],
+    "start": [
+      244,
+      100
+    ],
+    "end": [
+      206,
+      84
+    ],
+    "decision": [
+      196,
+      128
+    ]
+  },
+  "loop": 6,
+  "legend": [
+    {
+      "key": "ai",
+      "label": "AI model reads",
+      "color": {
+        "light": "#1F4E8C",
+        "dark": "#7FA6E0"
+      }
+    },
+    {
+      "key": "py",
+      "label": "Python checks and decides",
+      "color": {
+        "light": "#3D4A5C",
+        "dark": "#A3AFBE"
+      }
+    },
+    {
+      "key": "human",
+      "label": "A person, only when needed",
+      "color": {
+        "light": "#A86400",
+        "dark": "#E6A846"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "in",
+      "kind": "start",
+      "col": 0,
+      "row": 1,
+      "title": "Documents arrive",
+      "sub": "Payslips, bank statement, Form 16"
+    },
+    {
+      "id": "ocr",
+      "kind": "step",
+      "col": 1,
+      "row": 1,
+      "legend": "ai",
+      "icon": "ScanText",
+      "title": "Read every page",
+      "sub": "Mistral OCR, PDFs and photos"
+    },
+    {
+      "id": "type",
+      "kind": "decision",
+      "col": 2,
+      "row": 1,
+      "title": "What is it?",
+      "sub": "rules first"
+    },
+    {
+      "id": "pay",
+      "kind": "step",
+      "col": 3,
+      "row": 0,
+      "legend": "ai",
+      "icon": "Receipt",
+      "title": "Read the payslip",
+      "sub": "copied as printed"
+    },
+    {
+      "id": "stmt",
+      "kind": "step",
+      "col": 3,
+      "row": 1,
+      "legend": "ai",
+      "icon": "Landmark",
+      "title": "Read the statement",
+      "sub": "every transaction row"
+    },
+    {
+      "id": "f16",
+      "kind": "step",
+      "col": 3,
+      "row": 2,
+      "legend": "ai",
+      "icon": "FileText",
+      "title": "Read Form 16",
+      "sub": "annual salary and tax"
+    },
+    {
+      "id": "pchk",
+      "kind": "step",
+      "col": 4.05,
+      "row": 0,
+      "legend": "py",
+      "icon": "Calculator",
+      "title": "Payslip maths",
+      "sub": "sums, PF 12%, ESI, PT by state"
+    },
+    {
+      "id": "bchk",
+      "kind": "step",
+      "col": 4.05,
+      "row": 1,
+      "legend": "py",
+      "icon": "ListChecks",
+      "title": "Every row balances",
+      "sub": "opening + credits − debits"
+    },
+    {
+      "id": "fchk",
+      "kind": "step",
+      "col": 4.05,
+      "row": 2,
+      "legend": "py",
+      "icon": "SquareSigma",
+      "title": "Form 16 maths",
+      "sub": "taxable income, regime"
+    },
+    {
+      "id": "cross",
+      "kind": "step",
+      "col": 5.1,
+      "row": 0.5,
+      "legend": "py",
+      "icon": "GitCompareArrows",
+      "title": "Match the documents",
+      "sub": "salary credit, names, Form 16"
+    },
+    {
+      "id": "sig",
+      "kind": "step",
+      "col": 5.1,
+      "row": 1.5,
+      "legend": "py",
+      "icon": "ShieldAlert",
+      "title": "Fraud signals",
+      "sub": "edited PDF, odd font, late credit"
+    },
+    {
+      "id": "score",
+      "kind": "decision",
+      "col": 6.15,
+      "row": 1,
+      "title": "Verdict",
+      "sub": "score + hard fails"
+    },
+    {
+      "id": "ok",
+      "kind": "end",
+      "col": 7.2,
+      "row": 0,
+      "tone": "ok",
+      "icon": "ShieldCheck",
+      "title": "Verified",
+      "sub": "no person needed"
+    },
+    {
+      "id": "review",
+      "kind": "end",
+      "col": 7.2,
+      "row": 1,
+      "tone": "warn",
+      "icon": "TriangleAlert",
+      "title": "Needs review",
+      "sub": "a person looks"
+    },
+    {
+      "id": "flag",
+      "kind": "end",
+      "col": 7.2,
+      "row": 2,
+      "tone": "bad",
+      "icon": "Flag",
+      "title": "Flagged",
+      "sub": "likely an edited file"
+    },
+    {
+      "id": "person",
+      "kind": "step",
+      "col": 6.15,
+      "row": 3.05,
+      "legend": "human",
+      "icon": "UserRoundCheck",
+      "title": "A person fixes it",
+      "sub": "fixes a misread value, then all checks rerun"
+    }
+  ],
+  "groups": [
+    {
+      "id": "python",
+      "nodes": [
+        "pchk",
+        "bchk",
+        "fchk",
+        "cross",
+        "sig"
+      ],
+      "label": "Python only: the model never calculates",
+      "labelAlign": "right",
+      "badge": "ShieldCheck",
+      "tone": "py",
+      "pad": 24
+    }
+  ],
+  "edges": [
+    {
+      "from": "in",
+      "to": "ocr"
+    },
+    {
+      "from": "ocr",
+      "to": "type"
+    },
+    {
+      "from": "type",
+      "to": "pay",
+      "midX": 816.0
+    },
+    {
+      "from": "type",
+      "to": "stmt"
+    },
+    {
+      "from": "type",
+      "to": "f16",
+      "midX": 816.0
+    },
+    {
+      "from": "pay",
+      "to": "pchk"
+    },
+    {
+      "from": "stmt",
+      "to": "bchk"
+    },
+    {
+      "from": "f16",
+      "to": "fchk"
+    },
+    {
+      "from": "pchk",
+      "to": "cross"
+    },
+    {
+      "from": "bchk",
+      "to": "cross"
+    },
+    {
+      "from": "fchk",
+      "to": "cross"
+    },
+    {
+      "from": "bchk",
+      "to": "sig"
+    },
+    {
+      "from": "cross",
+      "to": "score"
+    },
+    {
+      "from": "sig",
+      "to": "score"
+    },
+    {
+      "from": "score",
+      "to": "ok",
+      "color": "ok"
+    },
+    {
+      "from": "score",
+      "to": "review",
+      "color": "warn"
+    },
+    {
+      "from": "score",
+      "to": "flag",
+      "color": "bad"
+    },
+    {
+      "from": "pchk",
+      "to": "pay",
+      "fromSide": "t",
+      "toSide": "t",
+      "lift": 34,
+      "style": "dashed",
+      "label": "Blank total: read the image again",
+      "color": "ai"
+    },
+    {
+      "from": "bchk",
+      "to": "stmt",
+      "fromSide": "b",
+      "toSide": "b",
+      "lift": 26,
+      "style": "dashed",
+      "label": "Rows that don't add up: read again",
+      "color": "ai"
+    },
+    {
+      "from": "review",
+      "to": "person",
+      "fromSide": "r",
+      "toSide": "r",
+      "points": [
+        [
+          2212,
+          338
+        ],
+        [
+          2212,
+          666
+        ]
+      ],
+      "style": "dashed",
+      "color": "human"
+    },
+    {
+      "from": "person",
+      "to": "sig",
+      "fromSide": "l",
+      "toSide": "b",
+      "style": "dashed",
+      "label": "checks run again",
+      "color": "human"
+    }
+  ],
+  "textScale": 1.18
+}

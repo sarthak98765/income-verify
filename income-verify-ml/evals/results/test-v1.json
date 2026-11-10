@@ -1,0 +1,3763 @@
+{
+ "name": "IncomeVerify v1 (test, extract=gpt-6.1-terra)",
+ "summary": {
+  "applicants": 30,
+  "documents": 150,
+  "classification_accuracy": 1.0,
+  "field_accuracy": {
+   "payslip": 0.9925925925925926,
+   "bank_statement": 1.0,
+   "form16": 1.0
+  },
+  "transactions": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0
+  },
+  "balance_reconciled": 1.0,
+  "verdict_accuracy": 0.9333333333333333,
+  "issue_catch_rate": 1.0,
+  "issues_caught": 11,
+  "issues_total": 11,
+  "false_alarm_rate": 0.10526315789473684,
+  "straight_through": 0.8947368421052632,
+  "auto_verified_precision": 1.0,
+  "income_exact": 1.0,
+  "emi_exact": 1.0,
+  "bounces_exact": 1.0,
+  "seconds_p50": 106.05,
+  "seconds_p95": 121.3,
+  "cost_per_applicant": 0.050259566666666665,
+  "cross_check_accuracy": 0.9647887323943662,
+  "per_field": {
+   "payslip": {
+    "employee_name": 1.0,
+    "employer_name": 1.0,
+    "month": 1.0,
+    "gross": 0.9888888888888889,
+    "total_deductions": 0.9888888888888889,
+    "net_pay": 0.9777777777777777
+   },
+   "bank_statement": {
+    "account_holder": 1.0,
+    "opening_balance": 1.0,
+    "closing_balance": 1.0
+   },
+   "form16": {
+    "employee_pan": 1.0,
+    "gross_salary": 1.0,
+    "standard_deduction": 1.0,
+    "taxable_income": 1.0,
+    "regime": 1.0
+   }
+  },
+  "document_perf": {
+   "all": {
+    "n": 150,
+    "exact": 0.9866666666666667,
+    "seconds_p50": 7.2,
+    "seconds_p95": 83.0,
+    "cost": 0.010051913333333334
+   },
+   "payslip": {
+    "n": 90,
+    "exact": 0.9777777777777777,
+    "seconds_p50": 7.2,
+    "seconds_p95": 9.0,
+    "cost": 0.002916666666666667
+   },
+   "bank_statement": {
+    "n": 30,
+    "exact": 1.0,
+    "seconds_p50": 77.3,
+    "seconds_p95": 90.4,
+    "cost": 0.038697466666666666
+   },
+   "form16": {
+    "n": 30,
+    "exact": 1.0,
+    "seconds_p50": 6.9,
+    "seconds_p95": 7.5,
+    "cost": 0.0028120999999999997
+   }
+  },
+  "by_issue": {
+   "fake_credit": {
+    "caught": 1,
+    "total": 1
+   },
+   "net_pay_edited": {
+    "caught": 2,
+    "total": 2
+   },
+   "name_mismatch": {
+    "caught": 1,
+    "total": 1
+   },
+   "pdf_edited": {
+    "caught": 1,
+    "total": 1
+   },
+   "salary_mismatch": {
+    "caught": 2,
+    "total": 2
+   },
+   "statutory": {
+    "caught": 1,
+    "total": 1
+   },
+   "form16_mismatch": {
+    "caught": 1,
+    "total": 1
+   },
+   "balance_edited": {
+    "caught": 2,
+    "total": 2
+   }
+  },
+  "confusion": {
+   "needs_review\u2192needs_review": 3,
+   "verified\u2192verified": 17,
+   "flagged\u2192flagged": 8,
+   "verified\u2192flagged": 2
+  }
+ },
+ "applicants": [
+  {
+   "id": "APP2000",
+   "issue": "fake_credit",
+   "expected_status": "needs_review",
+   "status": "needs_review",
+   "authenticity": 85,
+   "caught": true,
+   "fired": [
+    "window_dressing"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 75,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.002825
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.002825
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.8,
+     "cost": 0.002825
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 56.2,
+     "cost": 0.027043
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002806
+    }
+   ],
+   "cross_checks": [],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 84.6,
+   "cost": 0.038324
+  },
+  {
+   "id": "APP2001",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 102,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.5,
+     "cost": 0.002875
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.002849
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.8,
+     "cost": 0.002849
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 73.8,
+     "cost": 0.034496
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.002816
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 103.1,
+   "cost": 0.045885
+  },
+  {
+   "id": "APP2002",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 122,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.7,
+     "cost": 0.002895
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.5,
+     "cost": 0.002891
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002886
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 85.1,
+     "cost": 0.040954
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.002796
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 113.0,
+   "cost": 0.052422
+  },
+  {
+   "id": "APP2003",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 115,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.5,
+     "cost": 0.002806
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.002806
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.4,
+     "cost": 0.002806
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 82.4,
+     "cost": 0.039608
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002817
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 108.8,
+   "cost": 0.050843
+  },
+  {
+   "id": "APP2004",
+   "issue": "net_pay_edited",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 0,
+   "caught": true,
+   "fired": [
+    "latest_month_edit",
+    "math_broken",
+    "odd_font",
+    "payslip_net_pay",
+    "pdf_edited",
+    "salary_credit",
+    "salary_not_credited"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 110,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.002909
+    },
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.7,
+     "cost": 0.002906
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.7,
+     "cost": 0.002909
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 75.9,
+     "cost": 0.039034
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.5,
+     "cost": 0.002801
+    }
+   ],
+   "cross_checks": [
+    false,
+    false,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 104.0,
+   "cost": 0.050559
+  },
+  {
+   "id": "APP2005",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 114,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.3,
+     "cost": 0.002923
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 8.5,
+     "cost": 0.002918
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.002918
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 79.9,
+     "cost": 0.039138
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.002813
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 110.0,
+   "cost": 0.05071
+  },
+  {
+   "id": "APP2006",
+   "issue": "name_mismatch",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 100,
+   "caught": true,
+   "fired": [
+    "name_match"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 118,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.4,
+     "cost": 0.002916
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.002916
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.002916
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 76.2,
+     "cost": 0.039206
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 8.1,
+     "cost": 0.002828
+    }
+   ],
+   "cross_checks": [
+    true,
+    false,
+    false,
+    false,
+    false
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 105.5,
+   "cost": 0.050782
+  },
+  {
+   "id": "APP2007",
+   "issue": "pdf_edited",
+   "expected_status": "needs_review",
+   "status": "needs_review",
+   "authenticity": 75,
+   "caught": true,
+   "fired": [
+    "pdf_edited"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 133,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 8.2,
+     "cost": 0.002993
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.7,
+     "cost": 0.003023
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.5,
+     "cost": 0.00302
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 90.4,
+     "cost": 0.046448
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.7,
+     "cost": 0.002806
+    }
+   ],
+   "cross_checks": [],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 120.5,
+   "cost": 0.05829
+  },
+  {
+   "id": "APP2008",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "flagged",
+   "authenticity": 35,
+   "caught": null,
+   "fired": [
+    "math_broken",
+    "payslip_deductions_sum",
+    "payslip_earnings_sum",
+    "payslip_net_pay",
+    "pf_rate",
+    "salary_credit",
+    "salary_not_credited",
+    "statutory_mismatch"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": false,
+      "total_deductions": false,
+      "net_pay": false
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 108,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002894
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.7,
+     "cost": 0.002894
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": false,
+     "seconds": 8.4,
+     "cost": 0.003245
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 75.0,
+     "cost": 0.038452
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002812
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 104.1,
+   "cost": 0.050297
+  },
+  {
+   "id": "APP2009",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 61,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.4,
+     "cost": 0.002743
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.5,
+     "cost": 0.002743
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.002743
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 43.5,
+     "cost": 0.020777
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002795
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 70.9,
+   "cost": 0.031801
+  },
+  {
+   "id": "APP2010",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 125,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002979
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.7,
+     "cost": 0.002984
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.3,
+     "cost": 0.002984
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 79.1,
+     "cost": 0.041589
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.00283
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 106.6,
+   "cost": 0.053366
+  },
+  {
+   "id": "APP2011",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 138,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.00299
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.9,
+     "cost": 0.002985
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.002985
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 92.9,
+     "cost": 0.047208
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.3,
+     "cost": 0.002793
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 122.3,
+   "cost": 0.058961
+  },
+  {
+   "id": "APP2012",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 117,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.4,
+     "cost": 0.002734
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.4,
+     "cost": 0.002734
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.5,
+     "cost": 0.002734
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 83.0,
+     "cost": 0.041928
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002802
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 110.3,
+   "cost": 0.052932
+  },
+  {
+   "id": "APP2013",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 105,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.003052
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.3,
+     "cost": 0.003052
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.003044
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 72.5,
+     "cost": 0.036023
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.00283
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 100.2,
+   "cost": 0.048001
+  },
+  {
+   "id": "APP2014",
+   "issue": "salary_mismatch",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 65,
+   "caught": true,
+   "fired": [
+    "annual_income",
+    "esi_applicability",
+    "salary_credit",
+    "salary_not_credited",
+    "statutory_mismatch"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 120,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.00289
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.4,
+     "cost": 0.00289
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.00289
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 76.6,
+     "cost": 0.039363
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.7,
+     "cost": 0.002805
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 103.1,
+   "cost": 0.050838
+  },
+  {
+   "id": "APP2015",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 108,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002988
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 8.5,
+     "cost": 0.002988
+    },
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002988
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 75.4,
+     "cost": 0.03828
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.7,
+     "cost": 0.002843
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 104.4,
+   "cost": 0.050087
+  },
+  {
+   "id": "APP2016",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 102,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.6,
+     "cost": 0.003042
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.8,
+     "cost": 0.003042
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 8.5,
+     "cost": 0.003042
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 73.8,
+     "cost": 0.037728
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.002818
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 104.3,
+   "cost": 0.049672
+  },
+  {
+   "id": "APP2017",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 120,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 8.3,
+     "cost": 0.003104
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.7,
+     "cost": 0.003104
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.003104
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 78.0,
+     "cost": 0.040155
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002828
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 107.9,
+   "cost": 0.052295
+  },
+  {
+   "id": "APP2018",
+   "issue": "statutory",
+   "expected_status": "needs_review",
+   "status": "needs_review",
+   "authenticity": 90,
+   "caught": true,
+   "fired": [
+    "pf_rate",
+    "statutory_mismatch"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 62,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.5,
+     "cost": 0.00272
+    },
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.00272
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.00272
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 40.5,
+     "cost": 0.020739
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002811
+    }
+   ],
+   "cross_checks": [],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 67.4,
+   "cost": 0.03171
+  },
+  {
+   "id": "APP2019",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "flagged",
+   "authenticity": 45,
+   "caught": null,
+   "fired": [
+    "math_broken",
+    "payslip_net_pay",
+    "salary_credit",
+    "salary_not_credited"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": false
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 120,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.00288
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 9.0,
+     "cost": 0.00288
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": false,
+     "seconds": 7.9,
+     "cost": 0.002826
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 83.0,
+     "cost": 0.041916
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.002809
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 114.2,
+   "cost": 0.053311
+  },
+  {
+   "id": "APP2020",
+   "issue": "bounces",
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 113,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.3,
+     "cost": 0.003038
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 8.4,
+     "cost": 0.003038
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.6,
+     "cost": 0.003038
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 81.2,
+     "cost": 0.041523
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.2,
+     "cost": 0.002818
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 110.7,
+   "cost": 0.053455
+  },
+  {
+   "id": "APP2021",
+   "issue": "net_pay_edited",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 0,
+   "caught": true,
+   "fired": [
+    "latest_month_edit",
+    "math_broken",
+    "odd_font",
+    "payslip_net_pay",
+    "pdf_edited",
+    "salary_credit",
+    "salary_not_credited"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 87,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 10.8,
+     "cost": 0.002676
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.002676
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 5.9,
+     "cost": 0.002677
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 57.7,
+     "cost": 0.028049
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.5,
+     "cost": 0.002808
+    }
+   ],
+   "cross_checks": [
+    false,
+    false,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 89.0,
+   "cost": 0.038886
+  },
+  {
+   "id": "APP2022",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 109,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.4,
+     "cost": 0.003014
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.003017
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 8.1,
+     "cost": 0.003017
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 72.3,
+     "cost": 0.037022
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002829
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 101.8,
+   "cost": 0.048899
+  },
+  {
+   "id": "APP2023",
+   "issue": "form16_mismatch",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 100,
+   "caught": true,
+   "fired": [
+    "annual_income"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 124,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.3,
+     "cost": 0.003017
+    },
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.6,
+     "cost": 0.003017
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.003043
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 83.7,
+     "cost": 0.043318
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.5,
+     "cost": 0.002825
+    }
+   ],
+   "cross_checks": [
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 112.2,
+   "cost": 0.05522
+  },
+  {
+   "id": "APP2024",
+   "issue": "balance_edited",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 65,
+   "caught": true,
+   "fired": [
+    "balance_chain",
+    "balance_chain_break"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 114,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": false,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002929
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.002929
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.9,
+     "cost": 0.002929
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 87.8,
+     "cost": 0.049782
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.9,
+     "cost": 0.002831
+    }
+   ],
+   "cross_checks": [],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 116.8,
+   "cost": 0.0614
+  },
+  {
+   "id": "APP2025",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 101,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.4,
+     "cost": 0.00296
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002968
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 10.5,
+     "cost": 0.002968
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 72.1,
+     "cost": 0.035238
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.002809
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 103.8,
+   "cost": 0.046943
+  },
+  {
+   "id": "APP2026",
+   "issue": "balance_edited",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 65,
+   "caught": true,
+   "fired": [
+    "balance_chain",
+    "balance_chain_break"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 111,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": false,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002941
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 9.3,
+     "cost": 0.002925
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 6.8,
+     "cost": 0.00293
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 78.7,
+     "cost": 0.049408
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.6,
+     "cost": 0.002805
+    }
+   ],
+   "cross_checks": [],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 108.4,
+   "cost": 0.061009
+  },
+  {
+   "id": "APP2027",
+   "issue": "salary_mismatch",
+   "expected_status": "flagged",
+   "status": "flagged",
+   "authenticity": 75,
+   "caught": true,
+   "fired": [
+    "annual_income",
+    "salary_credit",
+    "salary_not_credited"
+   ],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 122,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.003019
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002899
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.4,
+     "cost": 0.002894
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 85.7,
+     "cost": 0.042683
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.002794
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 114.2,
+   "cost": 0.054289
+  },
+  {
+   "id": "APP2028",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 127,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 11.3,
+     "cost": 0.002889
+    },
+    {
+     "doc_type": "payslip",
+     "form": "photo",
+     "exact": true,
+     "seconds": 7.1,
+     "cost": 0.002881
+    },
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.5,
+     "cost": 0.002849
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "digital",
+     "exact": true,
+     "seconds": 88.4,
+     "cost": 0.045344
+    },
+    {
+     "doc_type": "form16",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.0,
+     "cost": 0.002785
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 121.3,
+   "cost": 0.056748
+  },
+  {
+   "id": "APP2029",
+   "issue": null,
+   "expected_status": "verified",
+   "status": "verified",
+   "authenticity": 100,
+   "caught": null,
+   "fired": [],
+   "classified": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "fields": {
+    "payslip": [
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     },
+     {
+      "employee_name": true,
+      "employer_name": true,
+      "month": true,
+      "gross": true,
+      "total_deductions": true,
+      "net_pay": true
+     }
+    ],
+    "bank_statement": [
+     {
+      "account_holder": true,
+      "opening_balance": true,
+      "closing_balance": true
+     }
+    ],
+    "form16": [
+     {
+      "employee_pan": true,
+      "gross_salary": true,
+      "standard_deduction": true,
+      "taxable_income": true,
+      "regime": true
+     }
+    ]
+   },
+   "transactions": {
+    "tp": 114,
+    "fp": 0,
+    "fn": 0
+   },
+   "reconciled": true,
+   "documents": [
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.5,
+     "cost": 0.00286
+    },
+    {
+     "doc_type": "payslip",
+     "form": "digital",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.00286
+    },
+    {
+     "doc_type": "payslip",
+     "form": "scan",
+     "exact": true,
+     "seconds": 7.2,
+     "cost": 0.00286
+    },
+    {
+     "doc_type": "bank_statement",
+     "form": "scan",
+     "exact": true,
+     "seconds": 76.1,
+     "cost": 0.038472
+    },
+    {
+     "doc_type": "form16",
+     "form": "scan",
+     "exact": true,
+     "seconds": 6.5,
+     "cost": 0.0028
+    }
+   ],
+   "cross_checks": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "income_exact": true,
+   "emi_exact": true,
+   "bounces_exact": true,
+   "seconds": 104.5,
+   "cost": 0.049852
+  }
+ ]
+}

@@ -1,0 +1,90 @@
+{
+  "users": [
+    {
+      "name": "income",
+      "password_hash": "ERYOd9n11pDDAYMrCkka9yqemIzo8YIjqzQA4zHqpXwnN9wc",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": [
+        "administrator"
+      ]
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "income",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "income_verify",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "main_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "retry_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 15000,
+        "x-dead-letter-exchange": "income_verify",
+        "x-dead-letter-routing-key": "main_queue"
+      }
+    },
+    {
+      "name": "dlq_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "income_verify",
+      "vhost": "/",
+      "destination": "main_queue",
+      "destination_type": "queue",
+      "routing_key": "main_queue",
+      "arguments": {}
+    },
+    {
+      "source": "income_verify",
+      "vhost": "/",
+      "destination": "retry_queue",
+      "destination_type": "queue",
+      "routing_key": "retry_queue",
+      "arguments": {}
+    },
+    {
+      "source": "income_verify",
+      "vhost": "/",
+      "destination": "dlq_queue",
+      "destination_type": "queue",
+      "routing_key": "dlq_queue",
+      "arguments": {}
+    }
+  ]
+}

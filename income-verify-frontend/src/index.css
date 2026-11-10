@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme tokens as "r g b" so Tailwind can add opacity (bg-surface/80). */
+:root {
+  --canvas: 245 246 244;
+  --surface: 255 255 255;
+  --subtle: 239 241 237;
+  --line: 222 225 219;
+  --ink: 23 32 43;
+  --ink-2: 74 85 99;
+  --ink-3: 112 122 134;
+  --brand-50: 238 243 250;
+  --brand-100: 220 230 244;
+  --brand-500: 58 102 168;
+  --brand-600: 31 78 140;
+  --brand-700: 24 62 112;
+  --ok: 30 122 76;
+  --warn: 168 100 0;
+  --bad: 179 38 30;
+  color-scheme: light;
+}
+.dark {
+  --canvas: 14 19 25;
+  --surface: 21 27 35;
+  --subtle: 28 36 46;
+  --line: 42 52 64;
+  --ink: 230 234 238;
+  --ink-2: 169 179 190;
+  --ink-3: 125 136 148;
+  --brand-50: 26 38 56;
+  --brand-100: 34 52 78;
+  --brand-500: 127 166 224;
+  --brand-600: 127 166 224;
+  --brand-700: 160 190 236;
+  --ok: 92 196 140;
+  --warn: 230 168 70;
+  --bad: 240 110 100;
+  color-scheme: dark;
+}
+
+html { scrollbar-gutter: stable; }
+body { font-feature-settings: 'tnum' 1; }
+
+.scroll-thin { scrollbar-width: thin; scrollbar-color: rgb(var(--line)) transparent; }
+
+/* Numbers in tables and figures line up. */
+.num { font-variant-numeric: tabular-nums lining-nums; }
+
+/* The highlight drawn over a value on the document page. */
+.locate-box { position: absolute; border-radius: 3px; background: rgb(var(--brand-500) / 0.18); box-shadow: 0 0 0 2px rgb(var(--brand-600)); pointer-events: none; }
+.locate-box.is-doubt { background: rgb(var(--warn) / 0.2); box-shadow: 0 0 0 2px rgb(var(--warn)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}

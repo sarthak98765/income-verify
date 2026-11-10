@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How IncomeVerify checks a loan file</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link id="fonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" />
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* The page is only the diagram: one self-contained <svg> on a transparent background (embeds cleanly anywhere). */
+  html, body { margin: 0; background: transparent; }
+  #diagram { display: block; width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<svg id="diagram" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+/* ─────────────────────────────────────────────────────────────────────────────
+   Animated flow / architecture diagram from a JSON spec. See ../SKILL.md for the spec.
+   Only the diagram: no title or framing text (the page that shows it writes those). render.mjs inlines the spec
+   below; open with ?theme=dark for the dark version.
+   ───────────────────────────────────────────────────────────────────────────── */
+const SPEC = {"name":"How IncomeVerify checks a loan file","size":{"w":2260,"h":780},"grid":{"x0":154,"y0":178,"col":270,"row":160},"sizes":{"step":[248,112],"start":[244,100],"end":[206,84],"decision":[196,128]},"loop":6,"legend":[{"key":"ai","label":"AI model reads","color":{"light":"#1F4E8C","dark":"#7FA6E0"}},{"key":"py","label":"Python checks and decides","color":{"light":"#3D4A5C","dark":"#A3AFBE"}},{"key":"human","label":"A person, only when needed","color":{"light":"#A86400","dark":"#E6A846"}}],"nodes":[{"id":"in","kind":"start","col":0,"row":1,"title":"Documents arrive","sub":"Payslips, bank statement, Form 16"},{"id":"ocr","kind":"step","col":1,"row":1,"legend":"ai","icon":"ScanText","title":"Read every page","sub":"Mistral OCR, PDFs and photos"},{"id":"type","kind":"decision","col":2,"row":1,"title":"What is it?","sub":"rules first"},{"id":"pay","kind":"step","col":3,"row":0,"legend":"ai","icon":"Receipt","title":"Read the payslip","sub":"copied as printed"},{"id":"stmt","kind":"step","col":3,"row":1,"legend":"ai","icon":"Landmark","title":"Read the statement","sub":"every transaction row"},{"id":"f16","kind":"step","col":3,"row":2,"legend":"ai","icon":"FileText","title":"Read Form 16","sub":"annual salary and tax"},{"id":"pchk","kind":"step","col":4.05,"row":0,"legend":"py","icon":"Calculator","title":"Payslip maths","sub":"sums, PF 12%, ESI, PT by state"},{"id":"bchk","kind":"step","col":4.05,"row":1,"legend":"py","icon":"ListChecks","title":"Every row balances","sub":"opening + credits − debits"},{"id":"fchk","kind":"step","col":4.05,"row":2,"legend":"py","icon":"SquareSigma","title":"Form 16 maths","sub":"taxable income, regime"},{"id":"cross","kind":"step","col":5.1,"row":0.5,"legend":"py","icon":"GitCompareArrows","title":"Match the documents","sub":"salary credit, names, Form 16"},{"id":"sig","kind":"step","col":5.1,"row":1.5,"legend":"py","icon":"ShieldAlert","title":"Fraud signals","sub":"edited PDF, odd font, late credit"},{"id":"score","kind":"decision","col":6.15,"row":1,"title":"Verdict","sub":"score + hard fails"},{"id":"ok","kind":"end","col":7.2,"row":0,"tone":"ok","icon":"ShieldCheck","title":"Verified","sub":"no person needed"},{"id":"review","kind":"end","col":7.2,"row":1,"tone":"warn","icon":"TriangleAlert","title":"Needs review","sub":"a person looks"},{"id":"flag","kind":"end","col":7.2,"row":2,"tone":"bad","icon":"Flag","title":"Flagged","sub":"likely an edited file"},{"id":"person","kind":"step","col":6.15,"row":3.05,"legend":"human","icon":"UserRoundCheck","title":"A person fixes it","sub":"fixes a misread value, then all checks rerun"}],"groups":[{"id":"python","nodes":["pchk","bchk","fchk","cross","sig"],"label":"Python only: the model never calculates","labelAlign":"right","badge":"ShieldCheck","tone":"py","pad":24}],"edges":[{"from":"in","to":"ocr"},{"from":"ocr","to":"type"},{"from":"type","to":"pay","midX":816},{"from":"type","to":"stmt"},{"from":"type","to":"f16","midX":816},{"from":"pay","to":"pchk"},{"from":"stmt","to":"bchk"},{"from":"f16","to":"fchk"},{"from":"pchk","to":"cross"},{"from":"bchk","to":"cross"},{"from":"fchk","to":"cross"},{"from":"bchk","to":"sig"},{"from":"cross","to":"score"},{"from":"sig","to":"score"},{"from":"score","to":"ok","color":"ok"},{"from":"score","to":"review","color":"warn"},{"from":"score","to":"flag","color":"bad"},{"from":"pchk","to":"pay","fromSide":"t","toSide":"t","lift":34,"style":"dashed","label":"Blank total: read the image again","color":"ai"},{"from":"bchk","to":"stmt","fromSide":"b","toSide":"b","lift":26,"style":"dashed","label":"Rows that don't add up: read again","color":"ai"},{"from":"review","to":"person","fromSide":"r","toSide":"r","points":[[2212,338],[2212,666]],"style":"dashed","color":"human"},{"from":"person","to":"sig","fromSide":"l","toSide":"b","style":"dashed","label":"checks run again","color":"human"}],"textScale":1.18}
+
+const THEMES = {
+  light: { canvas: '#FBFBF8', rule: '#EEEFEA', border: '#E2E4DE', card: '#FFFFFF', ink: '#17202B', ink2: '#4A5563', ink3: '#707A86', line: '#B9BEC4', shadow: 'rgba(23,32,43,0.06)' },
+  dark: { canvas: '#121820', rule: '#1A222C', border: '#2A3440', card: '#18202A', ink: '#E6EAEE', ink2: '#A9B3BE', ink3: '#7D8894', line: '#4E5966', shadow: 'rgba(0,0,0,0.35)' },
+}
+const TONE_SETS = {
+  light: { ok: '#1E7A4C', warn: '#A86400', bad: '#B3261E', brand: '#1F4E8C', ink: '#17202B' },
+  dark: { ok: '#5CC48C', warn: '#E6A846', bad: '#F06E64', brand: '#7FA6E0', ink: '#E6EAEE' },
+}
+const SIZES = { start: [236, 88], end: [210, 80], step: [252, 98], decision: [200, 124], store: [230, 104], note: [200, 56] }
+const NS = 'http://www.w3.org/2000/svg'
+
+const params = new URLSearchParams(location.search)
+const themeName = params.get('theme') || SPEC.theme?.mode || 'light'
+const T = { ...THEMES[themeName], ...(SPEC.theme?.[themeName] || {}) }
+const TONES = TONE_SETS[themeName]
+
+const TS = SPEC.textScale || 1 // multiplies every font size inside the diagram
+// Any colour in the spec may be "#hex" or {"light": "#hex", "dark": "#hex"}.
+const pick = c => (c && typeof c === 'object' ? c[themeName] || c.light : c)
+const legend = Object.fromEntries((SPEC.legend || []).map(l => [l.key, l]))
+const colorOf = key => pick(legend[key]?.color) || TONES[key] || pick(key) || T.ink3
+const toneColor = t => TONES[t] || pick(legend[t]?.color) || pick(t) || TONES.brand
+
+/* ── helpers ── */
+const el = (tag, attrs = {}, parent) => {
+  const n = document.createElementNS(NS, tag)
+  for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v)
+  if (parent) parent.appendChild(n)
+  return n
+}
+const canvasCtx = document.createElement('canvas').getContext('2d')
+const FONT = () => `'${SPEC.theme?.font || 'Instrument Sans'}', ui-sans-serif, system-ui, sans-serif`
+function wrap(text, size, weight, maxWidth, maxLines = 3) {
+  canvasCtx.font = `${weight} ${size * TS}px ${FONT()}`
+  const words = String(text || '').split(/\s+/).filter(Boolean)
+  const lines = []
+  let line = ''
+  for (const w of words) {
+    const next = line ? `${line} ${w}` : w
+    if (canvasCtx.measureText(next).width <= maxWidth || !line) line = next
+    else { lines.push(line); line = w }
+  }
+  if (line) lines.push(line)
+  if (lines.length > maxLines) { lines.length = maxLines; lines[maxLines - 1] = lines[maxLines - 1].replace(/\s*\S*$/, '…') }
+  return lines
+}
+function text(parent, lines, x, y, { size = 14, weight = 400, fill = T.ink, lh = 1.3, anchor = 'start', cls } = {}) {
+  const t = el('text', { x, y, 'font-size': size * TS, 'font-weight': weight, fill, 'text-anchor': anchor, class: cls }, parent)
+  lines.forEach((ln, i) => { const s = el('tspan', { x, dy: i ? size * TS * lh : 0 }, t); s.textContent = ln })
+  return t
+}
+function icon(parent, name, x, y, size, color) {
+  const node = window.lucide?.icons?.[name] || window.lucide?.[name]
+  const g = el('g', { transform: `translate(${x} ${y}) scale(${size / 24})`, fill: 'none', stroke: color, 'stroke-width': 1.9, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, parent)
+  if (!node) { el('circle', { cx: 12, cy: 12, r: 8 }, g); return g }
+  for (const [tag, attrs] of node[2]) el(tag, attrs, g)
+  return g
+}
+
+/* ── layout ── */
+const G = { x0: 140, y0: 120, col: 300, row: 150, ...(SPEC.grid || {}) }
+const nodes = SPEC.nodes.map(n => {
+  const [w, h] = n.size || SPEC.sizes?.[n.kind] || SIZES[n.kind] || SIZES.step
+  return { ...n, w, h, cx: n.x ?? G.x0 + n.col * G.col, cy: n.y ?? G.y0 + n.row * G.row }
+})
+const byId = Object.fromEntries(nodes.map(n => [n.id, n]))
+
+/** A point on a node's side; `offset` slides it along that side (px), so two edges can leave one side apart. */
+function port(n, side, offset = 0) {
+  if (side === 'r') return [n.cx + n.w / 2, n.cy + offset]
+  if (side === 'l') return [n.cx - n.w / 2, n.cy + offset]
+  if (side === 't') return [n.cx + offset, n.cy - n.h / 2]
+  return [n.cx + offset, n.cy + n.h / 2]
+}
+function defaultSides(a, b) {
+  const dx = b.cx - a.cx, dy = b.cy - a.cy
+  if (Math.abs(dx) >= Math.abs(dy) * 0.6) return dx >= 0 ? ['r', 'l'] : ['l', 'r']
+  return dy >= 0 ? ['b', 't'] : ['t', 'b']
+}
+/** Orthogonal route between two ports: a list of points, corners rounded later. */
+function route(e) {
+  const a = byId[e.from], b = byId[e.to]
+  const [fs, ts] = [e.fromSide, e.toSide].every(Boolean) ? [e.fromSide, e.toSide] : defaultSides(a, b)
+  const A = port(a, fs, e.fromOffset), B = port(b, ts, e.toOffset)
+  if (e.points) return [A, ...e.points, B]
+  const horiz = s => s === 'l' || s === 'r'
+  if (horiz(fs) && horiz(ts)) {
+    if (A[1] === B[1]) return [A, B]
+    const mx = e.midX ?? (A[0] + B[0]) / 2
+    return [A, [mx, A[1]], [mx, B[1]], B]
+  }
+  if (!horiz(fs) && !horiz(ts)) {
+    if (fs === ts) { // a loop over (t→t) or under (b→b) the nodes
+      const y = fs === 't' ? Math.min(A[1], B[1]) - (e.lift ?? 44) : Math.max(A[1], B[1]) + (e.lift ?? 44)
+      return [A, [A[0], y], [B[0], y], B]
+    }
+    if (A[0] === B[0]) return [A, B]
+    const my = e.midY ?? (A[1] + B[1]) / 2
+    return [A, [A[0], my], [B[0], my], B]
+  }
+  return horiz(fs) ? [A, [B[0], A[1]], B] : [A, [A[0], B[1]], B]
+}
+function roundedPath(pts, r = 12) {
+  let d = `M ${pts[0][0]} ${pts[0][1]}`
+  for (let i = 1; i < pts.length - 1; i += 1) {
+    const [p0, p1, p2] = [pts[i - 1], pts[i], pts[i + 1]]
+    const l1 = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]), l2 = Math.hypot(p2[0] - p1[0], p2[1] - p1[1])
+    const k = Math.min(r, l1 / 2, l2 / 2)
+    const a = [p1[0] - ((p1[0] - p0[0]) / l1) * k, p1[1] - ((p1[1] - p0[1]) / l1) * k]
+    const b = [p1[0] + ((p2[0] - p1[0]) / l2) * k, p1[1] + ((p2[1] - p1[1]) / l2) * k]
+    d += ` L ${a[0]} ${a[1]} Q ${p1[0]} ${p1[1]} ${b[0]} ${b[1]}`
+  }
+  const last = pts[pts.length - 1]
+  return `${d} L ${last[0]} ${last[1]}`
+}
+const pathLength = pts => pts.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]), 0)
+function labelPoint(pts, at) {
+  if (at) return at
+  let best = 0, bi = 0
+  pts.slice(1).forEach((p, i) => { const l = Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]); if (l > best) { best = l; bi = i } })
+  return [(pts[bi][0] + pts[bi + 1][0]) / 2, (pts[bi][1] + pts[bi + 1][1]) / 2]
+}
+
+/* ── draw: the "ledger" style ───────────────────────────────────────────────
+   Paper with faint ruled lines; a document card to start; cards with a coloured top rule and a round icon badge;
+   cylinders for stores; solid diamonds; hairline groups with a folder tab; rubber-stamp outcomes; dashes that
+   flow along each line in its colour. */
+const SERIF = () => `'${SPEC.theme?.serif || 'Newsreader'}', ui-serif, Georgia, serif`
+
+function draw() {
+  const W = SPEC.size?.w || 1600, H = SPEC.size?.h || 860
+  const svg = document.getElementById('diagram')
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+  svg.setAttribute('font-family', FONT())
+  const LOOP = SPEC.loop || 6 // seconds; every animation repeats a whole number of times in it, so a LOOP-long recording loops seamlessly
+
+  const defs = el('defs', {}, svg)
+  const rule = el('pattern', { id: 'ruled', width: 40, height: 28, patternUnits: 'userSpaceOnUse' }, defs)
+  el('line', { x1: 0, y1: 27.5, x2: 40, y2: 27.5, stroke: T.rule, 'stroke-width': 1 }, rule)
+  const f = el('filter', { id: 'lift', x: '-10%', y: '-15%', width: '120%', height: '140%' }, defs)
+  el('feDropShadow', { dx: 0, dy: 1.5, stdDeviation: 2.5, 'flood-color': T.shadow, 'flood-opacity': 1 }, f)
+  const mk = el('marker', { id: 'head', viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 6.5, markerHeight: 6.5, orient: 'auto-start-reverse' }, defs)
+  el('path', { d: 'M 0 1 L 10 5 L 0 9 Z', fill: T.line }, mk)
+
+  // the sheet: paper, ruled lines, a hairline border
+  el('rect', { x: 0.5, y: 0.5, width: W - 1, height: H - 1, rx: 10, fill: T.canvas, stroke: T.border }, svg)
+  el('rect', { x: 0.5, y: 0.5, width: W - 1, height: H - 1, rx: 10, fill: 'url(#ruled)' }, svg)
+
+  // groups: a hairline box with a folder tab on top
+  for (const grp of SPEC.groups || []) {
+    const members = grp.nodes.map(id => byId[id])
+    const pad = grp.pad ?? 26
+    const x1 = Math.min(...members.map(n => n.cx - n.w / 2)) - pad, x2 = Math.max(...members.map(n => n.cx + n.w / 2)) + pad
+    const y1 = Math.min(...members.map(n => n.cy - n.h / 2)) - pad, y2 = Math.max(...members.map(n => n.cy + n.h / 2)) + pad
+    const c = toneColor(grp.tone || 'brand')
+    const g = el('g', { class: 'group' }, svg)
+    el('rect', { x: x1, y: y1, width: x2 - x1, height: y2 - y1, rx: 8, fill: c, 'fill-opacity': 0.04, stroke: c, 'stroke-opacity': 0.45, 'stroke-width': 1.2 }, g)
+    if (grp.label) {
+      canvasCtx.font = `600 ${12.5 * TS}px ${FONT()}`
+      const tw = canvasCtx.measureText(grp.label).width + (grp.badge ? 50 : 26), th = 26 * TS
+      const tx = grp.labelAlign === 'right' ? x2 - tw - 16 : x1 + 16
+      el('path', { d: `M ${tx} ${y1} L ${tx} ${y1 - th + 6} Q ${tx} ${y1 - th} ${tx + 6} ${y1 - th} L ${tx + tw - 6} ${y1 - th} Q ${tx + tw} ${y1 - th} ${tx + tw} ${y1 - th + 6} L ${tx + tw} ${y1}`, fill: c, 'fill-opacity': 0.12, stroke: c, 'stroke-opacity': 0.45, 'stroke-width': 1.2 }, g)
+      if (grp.badge) icon(g, grp.badge, tx + 12, y1 - th / 2 - 8, 16, c)
+      text(g, [grp.label], tx + (grp.badge ? 36 : 13), y1 - th / 2 + 4.5 * TS, { size: 12.5, weight: 600, fill: c })
+    }
+    if (grp.callout) {
+      const lines = wrap(grp.callout, 13, 500, Math.max(220, x2 - x1 - 60), 3)
+      const ch = (22 + lines.length * 17) * TS
+      const cy = grp.calloutAbove ? y1 - ch - 40 : y2 + 12
+      el('rect', { x: x1, y: cy, width: x2 - x1, height: ch, rx: 6, fill: T.card, stroke: c, 'stroke-opacity': 0.45, 'stroke-width': 1.2 }, g)
+      el('rect', { x: x1, y: cy, width: 4, height: ch, fill: c }, g)
+      text(g, lines, x1 + 18, cy + (11 + 13) * TS, { size: 13, weight: 500, fill: T.ink2, lh: 1.3 })
+    }
+  }
+
+  // edges: a quiet base line, and dashes in the step's colour flowing along it
+  const edgeLayer = el('g', { class: 'edges' }, svg)
+  const flowLayer = el('g', { class: 'flow' }, svg)
+  const labelLayer = el('g', { class: 'labels' }, svg)
+  const DASH = 7, GAP = 11, PERIOD = DASH + GAP
+  SPEC.edges.forEach((e, i) => {
+    const pts = route(e)
+    const d = roundedPath(pts, 10)
+    const dashed = e.style === 'dashed'
+    el('path', { d, fill: 'none', stroke: T.line, 'stroke-width': 1.4, 'stroke-dasharray': dashed ? '2 5' : null, 'stroke-linecap': 'round', 'marker-end': e.arrow === false ? null : 'url(#head)' }, edgeLayer)
+    const color = colorOf(e.color || byId[e.to].legend || byId[e.from].legend || 'brand')
+    const len = pathLength(pts)
+    const flow = el('path', { d, fill: 'none', stroke: color, 'stroke-width': dashed ? 2 : 2.6, 'stroke-linecap': 'round', 'stroke-dasharray': `${DASH} ${GAP}`, opacity: dashed ? 0.75 : 0.95 }, flowLayer)
+    // forward motion of ~55 px/s, rounded to a whole number of dash periods per LOOP so the loop is seamless
+    const shift = Math.max(1, Math.round((55 * LOOP) / PERIOD)) * PERIOD
+    el('animate', { attributeName: 'stroke-dashoffset', from: 0, to: -shift, dur: `${LOOP}s`, repeatCount: 'indefinite', begin: `${-((i * 0.41) % LOOP)}s` }, flow)
+    if (len < 40) flow.remove() // too short to show motion
+    if (e.label) {
+      const [lx, ly] = labelPoint(pts, e.labelAt)
+      canvasCtx.font = `500 ${12.5 * TS}px ${FONT()}`
+      const tw = canvasCtx.measureText(e.label).width + 20
+      el('rect', { x: lx - tw / 2, y: ly - 12 * TS, width: tw, height: 24 * TS, rx: 4, fill: T.card, stroke: T.border, 'stroke-width': 1.2 }, labelLayer)
+      text(labelLayer, [e.label], lx, ly + 4.3 * TS, { size: 12.5, weight: 500, fill: T.ink2, anchor: 'middle' })
+    }
+  })
+
+  // nodes
+  const nodeLayer = el('g', { class: 'nodes' }, svg)
+  for (const n of nodes) {
+    const g = el('g', { class: `node ${n.kind}` }, nodeLayer)
+    const x = n.cx - n.w / 2, y = n.cy - n.h / 2
+    if (n.kind === 'start') {
+      // a small stack of paper: two sheets behind, the front one with a folded corner
+      const fold = 18
+      for (const k of [2, 1]) el('rect', { x: x + k * 5, y: y - k * 5, width: n.w, height: n.h, rx: 4, fill: T.card, stroke: T.ink3, 'stroke-opacity': 0.5, 'stroke-width': 1.1 }, g)
+      el('path', { d: `M ${x + 4} ${y} L ${x + n.w - fold} ${y} L ${x + n.w} ${y + fold} L ${x + n.w} ${y + n.h - 4} Q ${x + n.w} ${y + n.h} ${x + n.w - 4} ${y + n.h} L ${x + 4} ${y + n.h} Q ${x} ${y + n.h} ${x} ${y + n.h - 4} L ${x} ${y + 4} Q ${x} ${y} ${x + 4} ${y} Z`, fill: T.card, stroke: T.ink, 'stroke-width': 1.5, filter: 'url(#lift)' }, g)
+      el('path', { d: `M ${x + n.w - fold} ${y} L ${x + n.w - fold} ${y + fold} L ${x + n.w} ${y + fold}`, fill: T.canvas, stroke: T.ink, 'stroke-width': 1.5, 'stroke-linejoin': 'round' }, g)
+      icon(g, n.icon || 'FileStack', x + 18, n.cy - 13, 26, T.ink)
+      const sub = n.sub ? wrap(n.sub, 12.5, 400, n.w - 76, 3) : []
+      const top = n.cy - (sub.length * 16 * TS) / 2 + (sub.length ? -4 : 5) * TS
+      text(g, [n.title], x + 58, top, { size: 15.5, weight: 600, fill: T.ink })
+      if (sub.length) text(g, sub, x + 58, top + 19 * TS, { size: 12.5, fill: T.ink3, lh: 1.28 })
+    } else if (n.kind === 'end') {
+      // a rubber stamp: tilted, double border, serif capitals
+      const c = toneColor(n.tone)
+      const s = el('g', { transform: `rotate(${n.tilt ?? -3} ${n.cx} ${n.cy})` }, g)
+      el('rect', { x, y, width: n.w, height: n.h, rx: 6, fill: c, 'fill-opacity': 0.07, stroke: c, 'stroke-width': 2.6 }, s)
+      el('rect', { x: x + 5, y: y + 5, width: n.w - 10, height: n.h - 10, rx: 3, fill: 'none', stroke: c, 'stroke-width': 1 }, s)
+      icon(s, n.icon || 'Check', x + 18, n.cy - 12 - (n.sub ? 7 : 0), 22, c)
+      // shrink the capitals until they fit inside the inner border
+      let size = 19
+      for (; size > 11; size -= 0.5) { canvasCtx.font = `600 ${size * TS}px ${SERIF()}`; if (canvasCtx.measureText(String(n.title).toUpperCase()).width + 1.2 * n.title.length <= n.w - 66) break }
+      const t = text(s, [String(n.title).toUpperCase()], x + 50, n.cy + (n.sub ? -2 : 7) * TS, { size, weight: 600, fill: c })
+      t.setAttribute('font-family', SERIF()); t.setAttribute('letter-spacing', 1.2)
+      if (n.sub) text(s, [n.sub], x + 50, n.cy + 18 * TS, { size: 12, weight: 500, fill: c })
+    } else if (n.kind === 'decision') {
+      const dpath = `M ${n.cx} ${y} L ${x + n.w} ${n.cy} L ${n.cx} ${y + n.h} L ${x} ${n.cy} Z`
+      el('path', { d: dpath, fill: T.card, stroke: T.ink2, 'stroke-width': 1.4, 'stroke-linejoin': 'round', filter: 'url(#lift)' }, g)
+      const sub = n.sub ? wrap(n.sub, 11.5, 400, n.w * 0.55, 2) : []
+      const top = n.cy - (sub.length * 14 * TS) / 2 + (sub.length ? -2 : 5) * TS
+      text(g, [n.title], n.cx, top, { size: 14, weight: 600, fill: T.ink, anchor: 'middle' })
+      if (sub.length) text(g, sub, n.cx, top + 16 * TS, { size: 11.5, fill: T.ink3, anchor: 'middle', lh: 1.25 })
+    } else if (n.kind === 'store') {
+      // a database cylinder
+      const c = colorOf(n.legend || 'ink'), ry = 12
+      el('path', { d: `M ${x} ${y + ry} L ${x} ${y + n.h - ry} A ${n.w / 2} ${ry} 0 0 0 ${x + n.w} ${y + n.h - ry} L ${x + n.w} ${y + ry}`, fill: T.card, stroke: c, 'stroke-width': 1.5, filter: 'url(#lift)' }, g)
+      el('ellipse', { cx: n.cx, cy: y + ry, rx: n.w / 2, ry, fill: T.card, stroke: c, 'stroke-width': 1.5 }, g)
+      el('ellipse', { cx: n.cx, cy: y + ry, rx: n.w / 2 - 1, ry: ry - 1, fill: c, 'fill-opacity': 0.1 }, g)
+      icon(g, n.icon || 'Database', x + 18, n.cy - 4, 20, c)
+      const tx = x + 48, tw = n.w - 60
+      const sub = n.sub ? wrap(n.sub, 12, 400, tw, 2) : []
+      const top = n.cy + 8 * TS - (sub.length * 15 * TS) / 2
+      text(g, [n.title], tx, top, { size: 15, weight: 600, fill: T.ink })
+      if (sub.length) text(g, sub, tx, top + 18 * TS, { size: 12, fill: T.ink3, lh: 1.25 })
+    } else if (n.kind === 'note') {
+      const c = toneColor(n.tone || 'warn')
+      el('rect', { x, y, width: n.w, height: n.h, rx: 6, fill: T.card, stroke: c, 'stroke-opacity': 0.5 }, g)
+      el('rect', { x, y, width: 4, height: n.h, fill: c }, g)
+      const lines = wrap(n.title, 12.5, 500, n.w - 28, 3)
+      text(g, lines, x + 16, n.cy - ((lines.length - 1) * 16 * TS) / 2 + 4 * TS, { size: 12.5, weight: 500, fill: T.ink2, lh: 1.28 })
+    } else { // step: a card with a coloured top rule and a round icon badge
+      const c = colorOf(n.legend)
+      el('rect', { x, y, width: n.w, height: n.h, rx: 8, fill: T.card, stroke: T.border, 'stroke-width': 1.2, filter: 'url(#lift)' }, g)
+      el('path', { d: `M ${x + 0.6} ${y + 8} Q ${x + 0.6} ${y + 0.6} ${x + 8} ${y + 0.6} L ${x + n.w - 8} ${y + 0.6} Q ${x + n.w - 0.6} ${y + 0.6} ${x + n.w - 0.6} ${y + 8}`, fill: 'none', stroke: c, 'stroke-width': 3.2 }, g)
+      const r = 20, bx = x + 18 + r
+      el('circle', { cx: bx, cy: n.cy + 2, r, fill: c, 'fill-opacity': 0.1, stroke: c, 'stroke-opacity': 0.35 }, g)
+      icon(g, n.icon || 'Box', bx - 10, n.cy - 8, 20, c)
+      const tx = x + 18 + 2 * r + 14, tw = n.w - (tx - x) - 14
+      const title = wrap(n.title, 15, 600, tw, 2)
+      const sub = n.sub ? wrap(n.sub, 12.5, 400, tw, title.length > 1 ? 2 : 3) : []
+      const block = (title.length * 18 + (sub.length ? 4 + sub.length * 16 : 0)) * TS
+      const top = n.cy + 2 - block / 2 + 13 * TS
+      text(g, title, tx, top, { size: 15, weight: 600, fill: T.ink, lh: 1.2 })
+      if (sub.length) text(g, sub, tx, top + (title.length * 18 + 2) * TS, { size: 12.5, fill: T.ink3, lh: 1.28 })
+    }
+  }
+
+  for (const c of SPEC.captions || []) text(svg, [c.text], c.x, c.y, { size: c.size || 13, weight: c.weight || 600, fill: colorOf(c.color || T.ink3), anchor: c.anchor || 'start' })
+}
+
+;(async () => {
+  try { await document.fonts.load(`600 15px ${FONT()}`); await document.fonts.load(`400 12px ${FONT()}`); await document.fonts.load(`600 19px ${SERIF()}`); await document.fonts.ready } catch {}
+  draw()
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !params.has('record')) {
+    const svg = document.getElementById('diagram'); svg.pauseAnimations(); svg.setCurrentTime(1.2)
+  }
+  window.__ready = true
+})()
+</script>
+</body>
+</html>

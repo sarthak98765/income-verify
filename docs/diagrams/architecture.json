@@ -1,0 +1,255 @@
+{
+  "name": "IncomeVerify system architecture",
+  "size": {
+    "w": 1940,
+    "h": 660
+  },
+  "grid": {
+    "x0": 176,
+    "y0": 128,
+    "col": 300,
+    "row": 150
+  },
+  "textScale": 1.18,
+  "sizes": {
+    "step": [
+      248,
+      112
+    ],
+    "store": [
+      248,
+      104
+    ],
+    "start": [
+      266,
+      100
+    ],
+    "end": [
+      206,
+      84
+    ]
+  },
+  "loop": 6,
+  "legend": [
+    {
+      "key": "app",
+      "label": "Our services",
+      "color": {
+        "light": "#1F4E8C",
+        "dark": "#7FA6E0"
+      }
+    },
+    {
+      "key": "data",
+      "label": "Data and queue",
+      "color": {
+        "light": "#3D4A5C",
+        "dark": "#A3AFBE"
+      }
+    },
+    {
+      "key": "ext",
+      "label": "External APIs",
+      "color": {
+        "light": "#A86400",
+        "dark": "#E6A846"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "browser",
+      "kind": "start",
+      "col": 0,
+      "row": 1,
+      "title": "Reviewer's browser",
+      "sub": "uploads files, watches progress",
+      "icon": "Globe"
+    },
+    {
+      "id": "web",
+      "kind": "step",
+      "col": 1,
+      "row": 1,
+      "legend": "app",
+      "icon": "MonitorSmartphone",
+      "title": "React app",
+      "sub": "served by nginx, polls every 2.5 s"
+    },
+    {
+      "id": "api",
+      "kind": "step",
+      "col": 2,
+      "row": 1,
+      "legend": "app",
+      "icon": "Server",
+      "title": "Express API",
+      "sub": "uploads, rate limits, bot check"
+    },
+    {
+      "id": "mq",
+      "kind": "step",
+      "col": 3,
+      "row": 1,
+      "legend": "data",
+      "icon": "Layers",
+      "title": "RabbitMQ",
+      "sub": "main → retry → dead-letter"
+    },
+    {
+      "id": "worker",
+      "kind": "step",
+      "col": 4,
+      "row": 1,
+      "legend": "app",
+      "icon": "Cpu",
+      "title": "Python workers ×2",
+      "sub": "pipeline, progress, cost per task"
+    },
+    {
+      "id": "pg",
+      "kind": "store",
+      "col": 2,
+      "row": 2.5,
+      "legend": "data",
+      "icon": "Database",
+      "title": "Postgres",
+      "sub": "applications, documents, edits, usage"
+    },
+    {
+      "id": "files",
+      "kind": "store",
+      "col": 4,
+      "row": 2.5,
+      "legend": "data",
+      "icon": "FolderOpen",
+      "title": "File storage",
+      "sub": "uploads + OCR cache, deleted after 24 h"
+    },
+    {
+      "id": "ocr",
+      "kind": "step",
+      "col": 5.12,
+      "row": 0,
+      "legend": "ext",
+      "icon": "ScanText",
+      "title": "Mistral OCR",
+      "sub": "reads every page"
+    },
+    {
+      "id": "llm",
+      "kind": "step",
+      "col": 5.12,
+      "row": 1,
+      "legend": "ext",
+      "icon": "Sparkles",
+      "title": "OpenAI",
+      "sub": "extracts, with a fallback model"
+    },
+    {
+      "id": "trace",
+      "kind": "step",
+      "col": 5.12,
+      "row": 2,
+      "legend": "ext",
+      "icon": "Activity",
+      "title": "Langfuse",
+      "sub": "a trace for every model call"
+    }
+  ],
+  "groups": [
+    {
+      "id": "vps",
+      "nodes": [
+        "web",
+        "api",
+        "mq",
+        "worker",
+        "pg",
+        "files"
+      ],
+      "label": "One small VPS, Docker Compose",
+      "labelAlign": "right",
+      "badge": "Container",
+      "tone": "app",
+      "pad": 26
+    }
+  ],
+  "edges": [
+    {
+      "from": "browser",
+      "to": "web"
+    },
+    {
+      "from": "web",
+      "to": "api"
+    },
+    {
+      "from": "api",
+      "to": "mq"
+    },
+    {
+      "from": "mq",
+      "to": "worker"
+    },
+    {
+      "from": "worker",
+      "to": "ocr",
+      "midX": 1580
+    },
+    {
+      "from": "worker",
+      "to": "llm"
+    },
+    {
+      "from": "worker",
+      "to": "trace",
+      "midX": 1580,
+      "style": "dashed"
+    },
+    {
+      "from": "api",
+      "to": "pg",
+      "fromSide": "b",
+      "toSide": "t",
+      "fromOffset": -40,
+      "toOffset": -40
+    },
+    {
+      "from": "api",
+      "to": "files",
+      "fromSide": "b",
+      "toSide": "t",
+      "fromOffset": 40,
+      "toOffset": -40,
+      "midY": 383,
+      "label": "stores the upload",
+      "labelAt": [
+        1110,
+        383
+      ]
+    },
+    {
+      "from": "worker",
+      "to": "files",
+      "fromSide": "b",
+      "toSide": "t",
+      "fromOffset": 40,
+      "toOffset": 40
+    },
+    {
+      "from": "worker",
+      "to": "pg",
+      "fromSide": "b",
+      "toSide": "t",
+      "fromOffset": -40,
+      "toOffset": 40,
+      "midY": 423,
+      "label": "results + progress",
+      "labelAt": [
+        1110,
+        423
+      ]
+    }
+  ]
+}

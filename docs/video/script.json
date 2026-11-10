@@ -1,0 +1,46 @@
+[
+  {
+    "id": "i1",
+    "text": "Before a salaried borrower gets a loan, someone checks their income by hand. Payslips, a bank statement, Form 16. It takes hours per file, and edited documents still slip through."
+  },
+  {
+    "id": "i2",
+    "text": "IncomeVerify does it in about two minutes. An AI model only reads the documents. Every check and every decision is plain code."
+  },
+  {
+    "id": "s1",
+    "text": "This is the queue. Each application shows its verdict, the verified income, and how authentic the documents look."
+  },
+  {
+    "id": "s2",
+    "text": "Let's run a sample with something planted in it. The latest payslip was edited. Every page is read, then each document is checked on its own."
+  },
+  {
+    "id": "s3",
+    "text": "A couple of minutes later, it's flagged. Six separate signs. The payslip maths doesn't add up, the PDF was saved by an editing tool, and that salary never reached the bank."
+  },
+  {
+    "id": "s4",
+    "text": "Every finding links to its source. Here is the edited net pay, boxed on the original payslip, in a font used nowhere else on the page."
+  },
+  {
+    "id": "s5",
+    "text": "Bank statements are checked row by row. An edited balance breaks the running total, and the row is shown right on the statement."
+  },
+  {
+    "id": "s6",
+    "text": "A reviewer can correct anything that was misread. Every change is logged, and the whole file is checked again."
+  },
+  {
+    "id": "s7",
+    "text": "Under the hood, OCR and an AI model only read. Everything in this box is plain Python. The model never calculates."
+  },
+  {
+    "id": "s8",
+    "text": "And it's measured. On thirty fresh test applicants, every planted fraud was caught, no honest file was flagged, and each one cost about five cents."
+  },
+  {
+    "id": "end",
+    "text": "IncomeVerify, built by Sarthak Aggarwal. The code, the evals and the load tests are all on GitHub."
+  }
+]

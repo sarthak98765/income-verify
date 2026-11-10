@@ -1,0 +1,36 @@
+{
+ "base": "http://localhost:5920",
+ "at": "2026-11-05T20:21:16.427Z",
+ "results": [
+  {
+   "concurrent": 1,
+   "p50_s": 105,
+   "p95_s": 105,
+   "makespan_s": 105,
+   "per_hour": 34,
+   "verdicts_right": 1,
+   "cost_usd": 0.058,
+   "ocr_pages": 7
+  },
+  {
+   "concurrent": 5,
+   "p50_s": 370,
+   "p95_s": 373,
+   "makespan_s": 373,
+   "per_hour": 48,
+   "verdicts_right": 5,
+   "cost_usd": 0.244,
+   "ocr_pages": 35
+  },
+  {
+   "concurrent": 10,
+   "p50_s": 707,
+   "p95_s": 719,
+   "makespan_s": 719,
+   "per_hour": 50,
+   "verdicts_right": 10,
+   "cost_usd": 0.496,
+   "ocr_pages": 69
+  }
+ ]
+}

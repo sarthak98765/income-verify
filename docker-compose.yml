@@ -1,0 +1,101 @@
+# IncomeVerify, full stack:
+#   docker compose up -d --build            → http://localhost:5921 (UI), :5920 (API)
+#   docker compose up -d postgres rabbitmq  → only the infra, when running the services from source
+#
+# Postgres runs migrations/*.sql on first start (empty volume). RabbitMQ loads its exchange and
+# queues from infra/rabbitmq/definitions.json. Uploaded files and the OCR cache live in ./storage,
+# shared by the backend and the ML worker. Keys come from the repo-root .env. The "Try a sample"
+# applicants are read from income-verify-ml/data/dev (gitignored; regenerate it with
+# `python -m data_gen.generate --split dev --count 10 --seed 1` in income-verify-ml).
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: income-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: income
+      POSTGRES_PASSWORD: income
+      POSTGRES_DB: income_verify
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./income-verify-backend/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U income -d income_verify"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: income-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5674:5672"
+      - "15674:15672"
+    volumes:
+      - ./infra/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./infra/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  income-verify-ml:
+    build:
+      context: ./income-verify-ml
+    container_name: income-verify-ml
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://income:income@postgres:5432/income_verify
+      RABBITMQ_URL: amqp://income:income@rabbitmq:5672/
+      STORAGE_DIR: /storage
+    volumes:
+      - ./storage:/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  income-verify-backend:
+    build:
+      context: ./income-verify-backend
+    container_name: income-verify-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      APP_PORT: 5920
+      TRUST_PROXY: 1
+      DATABASE_URL: postgresql://income:income@postgres:5432/income_verify
+      RABBITMQ_URL: amqp://income:income@rabbitmq:5672/
+      STORAGE_DIR: /storage
+      SAMPLES_DIR: /samples
+    ports:
+      - "5920:5920"
+    volumes:
+      - ./storage:/storage
+      - ./income-verify-ml/data/dev:/samples:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  income-verify-frontend:
+    build:
+      context: ./income-verify-frontend
+    container_name: income-verify-frontend
+    restart: unless-stopped
+    ports:
+      - "5921:80"
+    depends_on:
+      - income-verify-backend
+
+volumes:
+  pg-data:
